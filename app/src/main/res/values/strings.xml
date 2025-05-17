@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Blockit</string>
+    <string name="accessibility_service_description">Blocks YouTube Shorts, Instagram Reels, and Snapchat Spotlight</string>
+
+</resources>
