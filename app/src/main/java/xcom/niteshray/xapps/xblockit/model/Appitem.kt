@@ -1,4 +1,10 @@
 package xcom.niteshray.xapps.xblockit.model
 
-class Appitem {
-}
+import android.graphics.drawable.Drawable
+
+data class Appitem(
+    val name : String,
+    val Icon : Drawable,
+    val packageName : String,
+    var isBlock : Boolean
+)

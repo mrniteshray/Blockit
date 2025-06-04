@@ -1,6 +1,9 @@
 package xcom.niteshray.xapps.xblockit
 
+import android.content.ComponentName
+import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +14,10 @@ import androidx.navigation.compose.rememberNavController
 import xcom.niteshray.xapps.xblockit.ui.Screens.MainScreen.MainScreen
 import xcom.niteshray.xapps.xblockit.ui.Screens.SplashScreen
 import xcom.niteshray.xapps.xblockit.ui.theme.BlockitTheme
+import android.provider.Settings
+import android.accessibilityservice.AccessibilityService
+import xcom.niteshray.xapps.xblockit.ui.Screens.PermissionScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,9 +36,24 @@ class MainActivity : ComponentActivity() {
             composable("splash"){
                 SplashScreen(navController)
             }
+            composable("permission"){
+                PermissionScreen(navController)
+            }
             composable(route = "main"){
                 MainScreen()
             }
         }
     }
 }
+
+fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
+    val expectedComponentName = ComponentName(context, service)
+    val enabledServicesSetting = Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+    val colonSplitter = TextUtils.SimpleStringSplitter(':')
+
+    colonSplitter.setString(enabledServicesSetting ?: return false)
+    return colonSplitter.any {
+        ComponentName.unflattenFromString(it)?.equals(expectedComponentName) == true
+    }
+}
+

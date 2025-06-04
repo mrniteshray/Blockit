@@ -1,10 +1,6 @@
 package xcom.niteshray.xapps.xblockit.ui.Screens.Home
 
-import android.net.Uri
-import androidx.annotation.OptIn
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -21,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import xcom.niteshray.xapps.xblockit.R
 import com.airbnb.lottie.compose.*
-import xcom.niteshray.xapps.xblockit.model.AppBlockItem
+import xcom.niteshray.xapps.xblockit.model.ShortBlockItem
 
 @Composable
 fun HomeScreen() {
@@ -33,10 +29,10 @@ fun HomeScreen() {
     )
 
     val apps = listOf(
-        AppBlockItem("Instagram Reels", R.drawable.reel,"com.instagram.android", false),
-        AppBlockItem("Youtube Shorts", R.drawable.shorts,"com.google.android.youtube", false),
-        AppBlockItem("SnapChat Spotlight", R.drawable.snapchat,"com.snapchat.android",false),
-        AppBlockItem("Facebook Reels", R.drawable.facebook,"com.facebook.katana",false)
+        ShortBlockItem("Instagram Reels", R.drawable.reel,"com.instagram.android", false),
+        ShortBlockItem("Youtube Shorts", R.drawable.shorts,"com.google.android.youtube", false),
+        ShortBlockItem("SnapChat Spotlight", R.drawable.snapchat,"com.snapchat.android",false),
+        ShortBlockItem("Facebook Reels", R.drawable.facebook,"com.facebook.katana",false)
     )
 
     Column(

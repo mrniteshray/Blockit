@@ -23,11 +23,11 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import xcom.niteshray.xapps.xblockit.model.AppBlockItem
+import xcom.niteshray.xapps.xblockit.model.ShortBlockItem
 
 
 @Composable
-fun ShortsBlockUI(apps: List<AppBlockItem>) {
+fun ShortsBlockUI(apps: List<ShortBlockItem>) {
     val context = LocalContext.current
     val sharedPref = context.getSharedPreferences("BlockedApps", Context.MODE_PRIVATE)
 
@@ -65,7 +65,7 @@ fun ShortsBlockUI(apps: List<AppBlockItem>) {
 }
 
 @Composable
-fun BlockItem(app: AppBlockItem, onToggleChange: (Boolean) -> Unit) {
+fun BlockItem(app: ShortBlockItem, onToggleChange: (Boolean) -> Unit) {
     var isChecked by remember { mutableStateOf(app.isEnabled) }
 
     Row(

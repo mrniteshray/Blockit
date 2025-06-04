@@ -1,6 +1,6 @@
 package xcom.niteshray.xapps.xblockit.model
 
-data class AppBlockItem(
+data class ShortBlockItem(
     val name: String,
     val iconResId: Int,
     val packageName: String,

@@ -1,6 +1,5 @@
 package xcom.niteshray.xapps.xblockit.ui.Screens
 
-import android.window.SplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,18 +9,29 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
+import xcom.niteshray.xapps.xblockit.isAccessibilityServiceEnabled
 import xcom.niteshray.xapps.xblockit.ui.theme.Black
+import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
 
 @Composable
 fun SplashScreen(navController: NavController){
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         delay(1000)
-        navController.navigate("main")
+        if (isAccessibilityServiceEnabled(context, BlockAccessibility::class.java)) {
+            navController.navigate("main"){
+                popUpTo("splash"){inclusive = true}
+            }
+        }else{
+            navController.navigate("permission"){
+                popUpTo("splash"){inclusive = true}
+            }
+        }
     }
     Box(
         modifier = Modifier

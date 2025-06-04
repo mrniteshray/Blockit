@@ -4,13 +4,11 @@ import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 
-class ShortsBlockAccessibility : AccessibilityService() {
+class BlockAccessibility : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -20,42 +18,45 @@ class ShortsBlockAccessibility : AccessibilityService() {
             flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
         }
         serviceInfo = info
-        Log.d("BlockerService", "Accessibility Service Connected ✅")
     }
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        Log.d("AddictionBlocker", "Accessibility Service Connected ✅")
         if (event == null) {
-            Log.d("BlockerService", "⚠️ Null event")
             return
         }
 
         Log.d("BlockerService", "📱 Package: ${event.packageName}")
 
-        val blockedApps = getSharedPreferences("BlockedApps", Context.MODE_PRIVATE)
+        val blockedshorts = getSharedPreferences("BlockedApps", Context.MODE_PRIVATE)
+        val blockedApps = BlockAppsUtil.getBlockApps(this)
         val pkgName = event.packageName?.toString() ?: return
-        val isBlocked = blockedApps.getBoolean(pkgName, false)
-        if (!isBlocked) return
+        Log.d("BlockedApp",blockedApps.toString())
+        if (blockedApps.contains(pkgName)) {
+            block()
+            Log.d("BlockerService","Blocked App "+pkgName)
+        }
 
         val rootNode = rootInActiveWindow ?: return
 
+        val isBlocked = blockedshorts.getBoolean(pkgName, false)
+        if (!isBlocked) return
         when (pkgName) {
             "com.google.android.youtube" -> {
                 Log.d("BlockerService", "🎯 YouTube detected")
                 if (isYouTubeShortsScreen(rootNode)) {
                     Log.d("BlockerService", "🎯 YouTube Shorts detected")
-                    blockShorts()
+                    block()
                 }
             }
 
             "com.instagram.android" -> {
                 if (isInstagramScreen(rootNode)) {
-                    blockShorts()
+                    block()
                 }
             }
 
             "com.snapchat.android" -> {
                 if (isSnapchatScreen(rootNode)) {
-                    blockShorts()
+                    block()
                 }
             }
         }
@@ -76,11 +77,9 @@ class ShortsBlockAccessibility : AccessibilityService() {
         return spotlight.isNotEmpty()
     }
 
-    private fun blockShorts() {
+    private fun block() {
         performGlobalAction(GLOBAL_ACTION_BACK)
-        Handler(Looper.getMainLooper()).post {
-            Toast.makeText(this, "Feature Blocked", Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(this, "Feature Blocked", Toast.LENGTH_SHORT).show()
     }
 
     override fun onInterrupt() {

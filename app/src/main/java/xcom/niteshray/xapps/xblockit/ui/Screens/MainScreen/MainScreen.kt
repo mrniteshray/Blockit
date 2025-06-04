@@ -2,6 +2,7 @@ package xcom.niteshray.xapps.xblockit.ui.Screens.MainScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -20,6 +21,9 @@ import xcom.niteshray.xapps.xblockit.ui.Screens.Home.HomeScreen
 import xcom.niteshray.xapps.xblockit.ui.Screens.Web.WebScreen
 import xcom.niteshray.xapps.xblockit.ui.theme.Black
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import xcom.niteshray.xapps.xblockit.ui.Screens.App.AppScreen
 import xcom.niteshray.xapps.xblockit.ui.theme.lightblue
 
@@ -49,7 +53,14 @@ fun MainScreen(){
                             }
                         },
                         label = { Text(screen.title) },
-                        icon = { Icon(screen.icon , contentDescription = screen.title) } ,
+                        icon = {
+                            when (screen.icon) {
+                                is ImageVector -> Icon(
+                                    screen.icon, contentDescription = screen.title , modifier = Modifier.size(24.dp))
+                                is Int -> Icon(painterResource(id = screen.icon), contentDescription = screen.title, modifier = Modifier.size(24.dp))
+                                else -> {  }
+                            }
+                               } ,
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = lightblue,
                             selectedTextColor = lightblue,
