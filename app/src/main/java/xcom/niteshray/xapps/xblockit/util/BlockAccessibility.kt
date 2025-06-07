@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
@@ -24,19 +25,38 @@ class BlockAccessibility : AccessibilityService() {
             return
         }
 
-        Log.d("BlockerService", "📱 Package: ${event.packageName}")
+        if (event.packageName == "xcom.niteshray.xapps.xblockit" || event.packageName == "com.android.systemui") {
+            return
+        }
 
-        val blockedshorts = getSharedPreferences("BlockedApps", Context.MODE_PRIVATE)
+
+        //App Blocking Functionality
         val blockedApps = BlockAppsUtil.getBlockApps(this)
         val pkgName = event.packageName?.toString() ?: return
         Log.d("BlockedApp",blockedApps.toString())
         if (blockedApps.contains(pkgName)) {
             block()
-            Log.d("BlockerService","Blocked App "+pkgName)
+            Log.d("BlockerService", "Blocked App $pkgName")
         }
+
+        val blockedUrls = BlockWesiteUtil.GetWebsite(this)
+        val blockedDomains = blockedUrls.mapNotNull { getDomainFromUrl(it) }
+
+
 
         val rootNode = rootInActiveWindow ?: return
 
+        //Website Blocking Functionality
+        val urls = findUrlsFromScreen(rootNode)
+        for (url in urls) {
+            if (blockedDomains.contains(url)) {
+                Log.d("BlockIt-Web", "Blocked URL detected: $url")
+                performGlobalAction(GLOBAL_ACTION_BACK) 
+            }
+        }
+
+        //Short Blocking Functionality
+        val blockedshorts = getSharedPreferences("BlockedApps", Context.MODE_PRIVATE)
         val isBlocked = blockedshorts.getBoolean(pkgName, false)
         if (!isBlocked) return
         when (pkgName) {
@@ -76,13 +96,44 @@ class BlockAccessibility : AccessibilityService() {
         val spotlight = rootNode.findAccessibilityNodeInfosByViewId("com.snapchat.android:id/spotlight_container")
         return spotlight.isNotEmpty()
     }
+    fun findUrlsFromScreen(node: AccessibilityNodeInfo): List<String> {
+        val urls = mutableListOf<String>()
+
+        if (node.text != null && node.isClickable) {
+            val text = node.text.toString()
+            if (text.startsWith("http") || text.contains(".com")) {
+                urls.add(text)
+            }
+        }
+
+        for (i in 0 until node.childCount) {
+            val child = node.getChild(i)
+            if (child != null) {
+                urls.addAll(findUrlsFromScreen(child))
+            }
+        }
+
+        return urls
+    }
+
+
 
     private fun block() {
         performGlobalAction(GLOBAL_ACTION_BACK)
-        Toast.makeText(this, "Feature Blocked", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@BlockAccessibility, "Feature Blocked", Toast.LENGTH_SHORT).show()
     }
 
     override fun onInterrupt() {
         Log.d("AddictionBlocker", "Service Interrupted ⚠️")
     }
+
+    fun getDomainFromUrl(url: String): String? {
+        return try {
+            val uri = Uri.parse(url)
+            uri.host?.replace("www.", "")
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 }

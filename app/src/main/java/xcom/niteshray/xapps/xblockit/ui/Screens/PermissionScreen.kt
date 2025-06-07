@@ -61,11 +61,12 @@ fun PermissionScreen(navController: NavHostController) {
     }
     Scaffold { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).background(Color.Black)
+            modifier = Modifier.fillMaxSize().padding(innerPadding).background(Color.Black).padding(4.dp)
         ){
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Enable Permission",
-                fontSize = 28.sp,
+                fontSize = 24.sp,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -73,42 +74,42 @@ fun PermissionScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Accessibility Service",
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = Blue
             )
             Text(
                 text = "This will allow us to block shorts/reels and unwanted apps & websites",
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 style = MaterialTheme.typography.titleSmall,
                 color = Color.Gray
             )
             Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = "Step 1 : Go to Accessibility Settings",
-                fontSize = 21.sp,
+                fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = "Step 2 : Click on Downloaded Apps",
-                fontSize = 21.sp,
+                fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = "Step 3 : Then Click on Blockit",
-                fontSize = 21.sp,
+                fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = "Step 4 : Enable Accessibility Service",
-                fontSize = 21.sp,
+                fontSize = 16.sp,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
