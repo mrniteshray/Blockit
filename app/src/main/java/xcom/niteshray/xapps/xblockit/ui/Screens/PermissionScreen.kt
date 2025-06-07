@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import xcom.niteshray.xapps.xblockit.isAccessibilityServiceEnabled
 import xcom.niteshray.xapps.xblockit.ui.theme.Blue
 import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
+import xcom.niteshray.xapps.xblockit.util.NotificationHelper
 
 @Composable
 fun PermissionScreen(navController: NavHostController) {
@@ -40,6 +41,7 @@ fun PermissionScreen(navController: NavHostController) {
     val isEnabled = remember { mutableStateOf(isAccessibilityServiceEnabled(context, BlockAccessibility::class.java)) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    NotificationHelper(context).checkAndRequestPermission()
     DisposableEffect(Unit) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {

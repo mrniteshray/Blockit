@@ -10,9 +10,12 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 
 class BlockAccessibility : AccessibilityService() {
+    lateinit var notificationHelper: NotificationHelper
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        notificationHelper = NotificationHelper(this)
+        notificationHelper.createChannel()
         val info = AccessibilityServiceInfo().apply {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED or AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
@@ -119,8 +122,9 @@ class BlockAccessibility : AccessibilityService() {
 
 
     private fun block() {
-        performGlobalAction(GLOBAL_ACTION_BACK)
+        notificationHelper.showBlockedNotification()
         Toast.makeText(this@BlockAccessibility, "Feature Blocked", Toast.LENGTH_SHORT).show()
+        performGlobalAction(GLOBAL_ACTION_BACK)
     }
 
     override fun onInterrupt() {

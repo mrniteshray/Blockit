@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +52,14 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
+        Text(
+            text = "Block Websites",
+            fontSize = 20.sp,
+            color = Color.White,
+            modifier = Modifier.padding(8.dp),
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -59,11 +68,10 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
                 .padding(8.dp)
         ){
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(
-                    text = "Block Websites",
-                    fontSize = 20.sp,
+                    text = "Enter url to block",
+                    fontSize = 16.sp,
                     color = Color.White,
                     modifier = Modifier.padding(8.dp)
                 )
@@ -73,7 +81,7 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
                         urltext.value = it
                     },
                     label = {
-                        Text(text = "Enter URL")
+                        Text(text = "e.g.,https://m.youtube.com")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -98,7 +106,8 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
                 },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Blue
-                    )
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(8.dp)
                     ) {
                     Text("Blockit", fontSize = 18.sp,
                         color = Color.White,
@@ -108,6 +117,7 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
             }
         }
         Spacer(modifier =  Modifier.height(8.dp))
+
         LazyColumn {
             items(weblist){
                 BlockWebItems(it){
