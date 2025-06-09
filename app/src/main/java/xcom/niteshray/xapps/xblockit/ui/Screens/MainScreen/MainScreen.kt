@@ -24,28 +24,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import xcom.niteshray.xapps.xblockit.ui.Screens.App.AppScreen
 import xcom.niteshray.xapps.xblockit.ui.theme.lightblue
 
 
 @Composable
-fun MainScreen(){
-    val navController = rememberNavController()
+fun MainScreen(navController: NavController){
+    val innerNavControlller = rememberNavController()
     val screens = listOf(Screen.Home, Screen.App, Screen.Web)
     Scaffold(
         bottomBar = {
             NavigationBar(
                 containerColor = Black
             ){
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val navBackStackEntry by innerNavControlller.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
                 screens.forEach { screen ->
                     NavigationBarItem(
                         selected = currentRoute == screen.route,
                         onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.startDestinationId) {
+                            innerNavControlller.navigate(screen.route) {
+                                popUpTo(innerNavControlller.graph.startDestinationId) {
                                     saveState = true
                                 }
                                 launchSingleTop = true
@@ -77,9 +78,11 @@ fun MainScreen(){
         Box(
             modifier = Modifier.padding(pd)
         ) {
-            NavHost(navController = navController , startDestination = "home"){
+            NavHost(navController = innerNavControlller , startDestination = "home"){
                 composable("home"){
-                    HomeScreen()
+                    HomeScreen(){
+                        navController.navigate("focus_screen/$it")
+                    }
                 }
                 composable("app"){
                     AppScreen()

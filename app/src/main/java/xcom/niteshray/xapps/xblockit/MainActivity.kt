@@ -16,6 +16,9 @@ import xcom.niteshray.xapps.xblockit.ui.Screens.SplashScreen
 import xcom.niteshray.xapps.xblockit.ui.theme.BlockitTheme
 import android.provider.Settings
 import android.accessibilityservice.AccessibilityService
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import xcom.niteshray.xapps.xblockit.ui.Screens.FocusScreen
 import xcom.niteshray.xapps.xblockit.ui.Screens.PermissionScreen
 
 
@@ -40,7 +43,13 @@ class MainActivity : ComponentActivity() {
                 PermissionScreen(navController)
             }
             composable(route = "main"){
-                MainScreen()
+                MainScreen(navController)
+            }
+            composable(route = "focus_screen/{duration}", arguments = listOf(navArgument("duration") { type = NavType.IntType })){ backStackEntry ->
+                val duration = backStackEntry.arguments?.getInt("duration") ?: 0
+                FocusScreen(duration){
+                    navController.popBackStack()
+                }
             }
         }
     }

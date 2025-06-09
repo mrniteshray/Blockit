@@ -1,7 +1,5 @@
 package xcom.niteshray.xapps.xblockit.ui.Screens.Web
 
-import android.content.Context
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
