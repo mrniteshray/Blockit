@@ -1,7 +1,12 @@
 package xcom.niteshray.xapps.xblockit.ui.Screens
 
 import android.app.Activity
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,18 +33,28 @@ import xcom.niteshray.xapps.xblockit.ui.theme.gray
 fun FocusScreen(duration: Int, onExit: () -> Boolean) {
         val context = LocalContext.current
         val activity = context as? Activity
+        val notificationmng = remember { context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager}
 
         LaunchedEffect(Unit) {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            if (!notificationmng.isNotificationPolicyAccessGranted){
+                Toast.makeText(context,"Please Allow Notification Permission",Toast.LENGTH_LONG).show()
+                context.startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+            }else{
+                notificationmng.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
+            }
         }
 
         DisposableEffect(Unit) {
             onDispose {
                 activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                if(notificationmng.isNotificationPolicyAccessGranted){
+                    notificationmng.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+                }
             }
         }
 
-        var timeLeft by remember { mutableStateOf(duration * 60) } // in seconds
+        var timeLeft by remember { mutableStateOf(duration * 60) }
         LaunchedEffect(key1 = timeLeft) {
             if (timeLeft > 0) {
                 delay(1000)

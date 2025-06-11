@@ -13,7 +13,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,17 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ComponentActivity
 import xcom.niteshray.xapps.xblockit.R
 import com.airbnb.lottie.compose.*
 import xcom.niteshray.xapps.xblockit.model.ShortBlockItem
 import xcom.niteshray.xapps.xblockit.ui.theme.Blue
-import java.util.Calendar
 
 @Composable
 fun HomeScreen(enableFocusMode : (Int) -> Unit) {
