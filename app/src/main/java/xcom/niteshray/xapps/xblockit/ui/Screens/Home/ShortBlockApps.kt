@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import xcom.niteshray.xapps.xblockit.model.ShortBlockItem
+import xcom.niteshray.xapps.xblockit.ui.theme.Black
+import xcom.niteshray.xapps.xblockit.ui.theme.Blue
 
 
 @Composable
@@ -102,10 +104,10 @@ fun BlockItem(app: ShortBlockItem, onToggleChange: (Boolean) -> Unit) {
                 onToggleChange(it)
             },
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Color(0xFF5E9CFA),
+                checkedThumbColor = Black,
                 uncheckedThumbColor = Color.Gray,
-                checkedTrackColor = Color(0xFF5E9CFA),
-                uncheckedTrackColor = Color.Gray
+                checkedTrackColor = Blue,
+                uncheckedTrackColor = Black,
             )
         )
     }

@@ -68,7 +68,7 @@ class NotificationHelper(private val context: Context) {
         checkAndRequestPermission()
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.app)
+            .setSmallIcon(R.drawable.logo)
             .setContentTitle(getMessages())
             .setContentText("")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
