@@ -10,7 +10,6 @@ object InstallApps {
             val apps = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
                 .filter { packageManager.getLaunchIntentForPackage(it.packageName) != null }
 
-
             return apps.map {
                 Appitem(
                     name = it.loadLabel(packageManager).toString(),

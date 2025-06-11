@@ -38,7 +38,7 @@ fun FocusScreen(duration: Int, onExit: () -> Boolean) {
         LaunchedEffect(Unit) {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             if (!notificationmng.isNotificationPolicyAccessGranted){
-                Toast.makeText(context,"Please Allow Notification Permission",Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"Allow DND permission to stay focus",Toast.LENGTH_LONG).show()
                 context.startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
             }else{
                 notificationmng.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
