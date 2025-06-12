@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import xcom.niteshray.xapps.xblockit.R
+import xcom.niteshray.xapps.xblockit.ui.Screens.Home.GradientButton
 import xcom.niteshray.xapps.xblockit.ui.theme.Blue
 import xcom.niteshray.xapps.xblockit.ui.theme.PurpleGrey40
 
@@ -91,26 +92,14 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
                     )
                 )
 
-                Button(onClick = {
+                GradientButton(text = "     Blockit    ", modifier = Modifier.align(Alignment.CenterHorizontally)) {
                     if (!webViewModel.validateWebsite(urltext.value)){
                         Toast.makeText(context,"Website Already Blocked",Toast.LENGTH_SHORT).show()
-                        return@Button
                     }else{
                         webViewModel.addWebsite(urltext.value)
                         urltext.value = ""
                         Toast.makeText(context,"Website Blocked",Toast.LENGTH_SHORT).show()
                     }
-
-                },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue
-                    ),
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
-                    ) {
-                    Text("Blockit", fontSize = 18.sp,
-                        color = Color.White,
-                        modifier = Modifier.padding(4.dp)
-                        )
                 }
             }
         }

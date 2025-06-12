@@ -18,14 +18,20 @@ import android.provider.Settings
 import android.accessibilityservice.AccessibilityService
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
 import xcom.niteshray.xapps.xblockit.ui.Screens.FocusScreen
 import xcom.niteshray.xapps.xblockit.ui.Screens.PermissionScreen
 
 
 class MainActivity : ComponentActivity() {
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        firebaseAnalytics = Firebase.analytics
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null)
         setContent {
             BlockitTheme {
                 App()

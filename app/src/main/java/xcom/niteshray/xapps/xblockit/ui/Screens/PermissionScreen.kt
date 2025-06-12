@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import xcom.niteshray.xapps.xblockit.R
 import xcom.niteshray.xapps.xblockit.isAccessibilityServiceEnabled
+import xcom.niteshray.xapps.xblockit.ui.Screens.Home.GradientButton
 import xcom.niteshray.xapps.xblockit.ui.theme.Blue
 import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
 import xcom.niteshray.xapps.xblockit.util.NotificationHelper
@@ -133,29 +134,16 @@ fun PermissionScreen(navController: NavHostController) {
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(24.dp))
-                    Button(onClick = {
+                    GradientButton(text = "Enable Accessibility Service",modifier = Modifier.align(Alignment.CenterHorizontally),) {
                         try {
-                            context.startActivity(
-                                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                }
-                            )
+                        context.startActivity(
+                            Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
+                        )
                         } catch (e: ActivityNotFoundException) {
                             Toast.makeText(context, "Accessibility settings not found", Toast.LENGTH_SHORT).show()
                         }
-                    },colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue,
-                        contentColor = Color.White
-                    ),
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-
-                    ) {
-                        Text(
-                            text = "Enable Accessibility Service",
-                            fontSize = 18.sp,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
                     }
                 }
             }

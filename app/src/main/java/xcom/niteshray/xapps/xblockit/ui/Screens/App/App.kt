@@ -168,7 +168,7 @@ fun AppItems(app: Appitem, onToggleChange: (Boolean) -> Unit) {
                 onToggleChange(it)
             },
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Black,
+                checkedThumbColor = Color.White,
                 uncheckedThumbColor = Color.Gray,
                 checkedTrackColor = Blue,
                 uncheckedTrackColor = Black,

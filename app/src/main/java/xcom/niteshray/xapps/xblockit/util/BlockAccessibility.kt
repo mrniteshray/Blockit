@@ -119,8 +119,6 @@ class BlockAccessibility : AccessibilityService() {
         return urls
     }
 
-
-
     private fun block() {
         notificationHelper.showBlockedNotification()
         Toast.makeText(this@BlockAccessibility, "Feature Blocked", Toast.LENGTH_SHORT).show()

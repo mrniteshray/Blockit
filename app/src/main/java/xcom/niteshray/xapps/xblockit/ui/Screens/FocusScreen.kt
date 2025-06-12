@@ -9,9 +9,16 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -22,9 +29,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import xcom.niteshray.xapps.xblockit.ui.theme.gray
@@ -75,22 +86,54 @@ fun FocusScreen(duration: Int, onExit: () -> Boolean) {
         ) {
             val minutes = timeLeft / 60
             val seconds = timeLeft % 60
-            val timeText = String.format("%02d:%02d", minutes, seconds)
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text(
-                    text = timeText,
-                    fontSize = 180.sp,
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    Box(
+                        modifier = Modifier.background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(Color(0xFF009AEE), Color(0xFF00C6FF))
+                            )
+                            , RoundedCornerShape(14.dp))
+                    ){
+                        Text(
+                            text = String.format("%02d", minutes),
+                            fontSize = 180.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(12.dp),
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
+                    Box(
+                        modifier = Modifier.background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(Color(0xFF009AEE), Color(0xFF00C6FF))
+                            )
+                            , RoundedCornerShape(14.dp))
+                    ){
+                        Text(
+                            text = String.format("%02d", seconds),
+                            fontSize = 180.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(12.dp),
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Time is yours. Use it well",
                     fontSize = 24.sp,
-                    color = gray,
-                    textAlign = TextAlign.Center
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
                 )
             }
 

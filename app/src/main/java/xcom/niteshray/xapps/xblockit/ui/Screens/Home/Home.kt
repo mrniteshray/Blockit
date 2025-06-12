@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +40,14 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
         composition = composition,
         iterations = LottieConstants.IterateForever
     )
+
+    val ShineBlue = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF00B4DB),
+            Color(0xFF0083B0)
+        )
+    )
+
 
     val apps = listOf(
         ShortBlockItem("Instagram Reels", R.drawable.reel,"com.instagram.android", false),
@@ -73,21 +82,9 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
             fontWeight = FontWeight.Medium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        Button(onClick = {
+        GradientButton(text = "Enable Focus Mode",modifier = Modifier.align(Alignment.CenterHorizontally)) {
             showDialog = true
-        },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Blue
-            ),
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-
-        ){
-            Text(text = "Enable Focus Mode",
-                fontSize = 16.sp,
-                color = Color.White
-            )
         }
-
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -121,8 +118,6 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
                 }
             )
         }
-
-
         Spacer(modifier = Modifier.height(20.dp))
         ShortsBlockUI(apps)
     }
