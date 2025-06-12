@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +67,7 @@ fun FocusScreen(duration: Int, onExit: () -> Boolean) {
             }
         }
 
-        var timeLeft by remember { mutableStateOf(duration * 60) }
+        var timeLeft by rememberSaveable { mutableStateOf(duration * 60) }
         LaunchedEffect(key1 = timeLeft) {
             if (timeLeft > 0) {
                 delay(1000)
@@ -92,38 +94,48 @@ fun FocusScreen(duration: Int, onExit: () -> Boolean) {
             ){
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    horizontalArrangement = Arrangement.Center
                 ){
                     Box(
-                        modifier = Modifier.background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(Color(0xFF009AEE), Color(0xFF00C6FF))
+                        modifier = Modifier
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color(0xFF009AEE), Color(0xFF00C6FF))
+                                ),
+                                shape = RoundedCornerShape(14.dp)
                             )
-                            , RoundedCornerShape(14.dp))
-                    ){
+                            .padding(16.dp)
+                    ) {
                         Text(
                             text = String.format("%02d", minutes),
                             fontSize = 180.sp,
                             color = Color.White,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(12.dp),
-                            fontStyle = FontStyle.Italic
+                            textAlign = TextAlign.Center
                         )
                     }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = ":",
+                        fontSize = 180.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
                     Box(
-                        modifier = Modifier.background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(Color(0xFF009AEE), Color(0xFF00C6FF))
+                        modifier = Modifier
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(Color(0xFF009AEE), Color(0xFF00C6FF))
+                                ),
+                                shape = RoundedCornerShape(14.dp)
                             )
-                            , RoundedCornerShape(14.dp))
-                    ){
+                            .padding(16.dp)
+                    ) {
                         Text(
                             text = String.format("%02d", seconds),
                             fontSize = 180.sp,
                             color = Color.White,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(12.dp),
-                            fontStyle = FontStyle.Italic
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
