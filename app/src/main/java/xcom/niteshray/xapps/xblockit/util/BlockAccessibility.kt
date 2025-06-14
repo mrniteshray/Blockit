@@ -110,9 +110,28 @@ class BlockAccessibility : AccessibilityService() {
             if (text.startsWith("http") ||
                 text.contains(".com") ||
                 text.contains(".net") ||
-                text.contains(".org")
+                text.contains(".org") ||
+                text.contains(".in") ||
+                text.contains(".edu") ||
+                text.contains(".gov") ||
+                text.contains(".info") ||
+                text.contains(".biz") ||
+                text.contains(".io") ||
+                text.contains(".co")
             ) {
-                val cleaned = text.substringBefore(".com") + ".com"
+                val cleaned = when {
+                    text.contains(".com") -> text.substringBefore(".com") + ".com"
+                    text.contains(".net") -> text.substringBefore(".net") + ".net"
+                    text.contains(".org") -> text.substringBefore(".org") + ".org"
+                    text.contains(".in") -> text.substringBefore(".in") + ".in"
+                    text.contains(".edu") -> text.substringBefore(".edu") + ".edu"
+                    text.contains(".gov") -> text.substringBefore(".gov") + ".gov"
+                    text.contains(".info") -> text.substringBefore(".info") + ".info"
+                    text.contains(".biz") -> text.substringBefore(".biz") + ".biz"
+                    text.contains(".io") -> text.substringBefore(".io") + ".io"
+                    text.contains(".co") -> text.substringBefore(".co") + ".co"
+                    else -> text
+                }
                 val base = getBaseUrl(cleaned)
                 if (base.isNotEmpty()) {
                     urls.add(base)
