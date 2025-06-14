@@ -80,7 +80,7 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
                         urltext.value = it
                     },
                     label = {
-                        Text(text = "e.g.,https://m.youtube.com")
+                        Text(text = "e.g.,https://m.youtube.com", color = Color.White)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -88,17 +88,22 @@ fun WebScreen(webViewModel: WebViewModel = viewModel()) {
                     shape = RoundedCornerShape(8.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = PurpleGrey40,
-                        unfocusedBorderColor = PurpleGrey40
+                        unfocusedBorderColor = PurpleGrey40,
+                        focusedTextColor = Color.White
                     )
                 )
 
                 GradientButton(text = "     Blockit    ", modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    if (!webViewModel.validateWebsite(urltext.value)){
-                        Toast.makeText(context,"Website Already Blocked",Toast.LENGTH_SHORT).show()
+                    if (urltext.value.isEmpty()){
+                        Toast.makeText(context,"Enter Url please!",Toast.LENGTH_LONG).show()
                     }else{
-                        webViewModel.addWebsite(urltext.value)
-                        urltext.value = ""
-                        Toast.makeText(context,"Website Blocked",Toast.LENGTH_SHORT).show()
+                        if (!webViewModel.validateWebsite(urltext.value)){
+                            Toast.makeText(context,"Website Already Blocked",Toast.LENGTH_SHORT).show()
+                        }else{
+                            webViewModel.addWebsite(urltext.value)
+                            urltext.value = ""
+                            Toast.makeText(context,"Website Blocked",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -146,7 +151,6 @@ fun BlockWebItems(url : String, ondelete : (String) -> Unit) {
                 contentDescription = "delete site",
                 tint = Color.Red,
                 modifier = Modifier.padding(8.dp).size(24.dp).clickable{
-                    //delete website
                     ondelete(url)
                 }
             )

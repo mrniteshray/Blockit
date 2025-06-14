@@ -8,6 +8,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
+import java.net.URL
 
 class BlockAccessibility : AccessibilityService() {
     lateinit var notificationHelper: NotificationHelper
@@ -42,19 +43,21 @@ class BlockAccessibility : AccessibilityService() {
             Log.d("BlockerService", "Blocked App $pkgName")
         }
 
+
+
         val blockedUrls = BlockWesiteUtil.GetWebsite(this)
         val blockedDomains = blockedUrls.mapNotNull { getDomainFromUrl(it) }
 
-
-
         val rootNode = rootInActiveWindow ?: return
-
         //Website Blocking Functionality
         val urls = findUrlsFromScreen(rootNode)
+        Log.d("Blockit-web","Screen url : ${urls.toString()}")
+        Log.d("Blockit-web","Block url : ${blockedDomains.toString()}")
+
         for (url in urls) {
             if (blockedDomains.contains(url)) {
                 Log.d("BlockIt-Web", "Blocked URL detected: $url")
-                performGlobalAction(GLOBAL_ACTION_BACK) 
+                block()
             }
         }
 
@@ -99,13 +102,21 @@ class BlockAccessibility : AccessibilityService() {
         val spotlight = rootNode.findAccessibilityNodeInfosByViewId("com.snapchat.android:id/spotlight_container")
         return spotlight.isNotEmpty()
     }
-    fun findUrlsFromScreen(node: AccessibilityNodeInfo): List<String> {
+    private fun findUrlsFromScreen(node: AccessibilityNodeInfo): List<String> {
         val urls = mutableListOf<String>()
 
         if (node.text != null && node.isClickable) {
             val text = node.text.toString()
-            if (text.startsWith("http") || text.contains(".com")) {
-                urls.add(text)
+            if (text.startsWith("http") ||
+                text.contains(".com") ||
+                text.contains(".net") ||
+                text.contains(".org")
+            ) {
+                val cleaned = text.substringBefore(".com") + ".com"
+                val base = getBaseUrl(cleaned)
+                if (base.isNotEmpty()) {
+                    urls.add(base)
+                }
             }
         }
 
@@ -138,4 +149,14 @@ class BlockAccessibility : AccessibilityService() {
         }
     }
 
+    private fun getBaseUrl(url: String): String {
+        return try {
+            val parsed = URL(url)
+            "${parsed.protocol}://${parsed.host}".let {
+                if (parsed.port == -1) it else "$it:${parsed.port}"
+            }
+        } catch (e: Exception) {
+            url
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package xcom.niteshray.xapps.xblockit.util
 
 import android.content.Context
+import java.net.URL
 
 object BlockWesiteUtil {
     private val SHARED_PREF_NAME = "block_web"
@@ -15,13 +16,26 @@ object BlockWesiteUtil {
     }
 
     fun AddWebsite(context: Context,url : String){
+        val base = getBaseUrl(url)
         val blocklist = GetWebsite(context).toMutableSet()
-        blocklist.add(url)
-        SaveWebsite(context,blocklist)
+        blocklist.add(base)
+        SaveWebsite(context, blocklist)
     }
     fun RemoveWebsite(context: Context,url : String){
+        val base = getBaseUrl(url)
         val blocklist = GetWebsite(context).toMutableSet()
-        blocklist.remove(url)
-        SaveWebsite(context,blocklist)
+        blocklist.remove(base)
+        SaveWebsite(context, blocklist)
+    }
+
+    private fun getBaseUrl(url: String): String {
+        return try {
+            val parsed = URL(url)
+            "${parsed.protocol}://${parsed.host}".let {
+                if (parsed.port == -1) it else "$it:${parsed.port}"
+            }
+        } catch (e: Exception) {
+            url
+        }
     }
 }
