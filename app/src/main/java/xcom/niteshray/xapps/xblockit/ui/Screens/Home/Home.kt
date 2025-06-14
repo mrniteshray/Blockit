@@ -1,13 +1,22 @@
 package xcom.niteshray.xapps.xblockit.ui.Screens.Home
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -21,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,18 +45,14 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedMinutes by remember { mutableStateOf(25f) }
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation))
+    val context = LocalContext.current
 
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever
     )
 
-    val ShineBlue = Brush.linearGradient(
-        colors = listOf(
-            Color(0xFF00B4DB),
-            Color(0xFF0083B0)
-        )
-    )
+    var showPrivacyDialog by remember { mutableStateOf(false) }
 
 
     val apps = listOf(
@@ -59,6 +65,46 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.TopEnd
+        ) {
+            IconButton(onClick = { showPrivacyDialog = true }) {
+                Icon(
+                    imageVector =Icons.Default.Info,
+                    contentDescription = "Privacy Policy",
+                    tint = Color.White
+                )
+            }
+        }
+        if (showPrivacyDialog) {
+            AlertDialog(
+                onDismissRequest = { showPrivacyDialog = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showPrivacyDialog = false
+                        val uri = "https://mrniteshray.github.io/Blockit/PRIVACY_POLICY"
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                        context.startActivity(intent)
+                    }) {
+                        Text("View Privacy Policy")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showPrivacyDialog = false}) {
+                        Text("Close")
+                    }
+                },
+                text = {
+                    Text(
+                        text = "Click below to view our Privacy Policy.",
+                        color = Color.Black
+                    )
+                },
+                containerColor = Color.White
+            )
+        }
         LottieAnimation(
             composition = composition,
             progress = { progress },
@@ -118,7 +164,7 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
                 }
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         ShortsBlockUI(apps)
     }
 }
