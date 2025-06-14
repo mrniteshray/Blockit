@@ -40,7 +40,7 @@
 
 | Shorts Blocking | App Blocking | Focus Mode |
 |-----------------|--------------|------------|
-| ![](screenshots/shorts.jpg) | ![](screenshots/apps.jpg) | ![](screenshots/focus.jpg) |
+| ![](screenshots/shorts.png) | ![](screenshots/apps.png) | ![](screenshots/focus.png) |
 
 ---
 
