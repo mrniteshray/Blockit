@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
-import xcom.niteshray.xapps.xblockit.isAccessibilityServiceEnabled
 import xcom.niteshray.xapps.xblockit.ui.theme.Black
 import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
 

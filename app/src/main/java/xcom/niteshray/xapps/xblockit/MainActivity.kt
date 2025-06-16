@@ -16,6 +16,8 @@ import xcom.niteshray.xapps.xblockit.ui.Screens.SplashScreen
 import xcom.niteshray.xapps.xblockit.ui.theme.BlockitTheme
 import android.provider.Settings
 import android.accessibilityservice.AccessibilityService
+import android.content.Intent
+import android.net.Uri
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import xcom.niteshray.xapps.xblockit.ui.Screens.FocusScreen
@@ -52,17 +54,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
-    val expectedComponentName = ComponentName(context, service)
-    val enabledServicesSetting = Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-    val colonSplitter = TextUtils.SimpleStringSplitter(':')
-
-    colonSplitter.setString(enabledServicesSetting ?: return false)
-    return colonSplitter.any {
-        ComponentName.unflattenFromString(it)?.equals(expectedComponentName) == true
     }
 }
 
