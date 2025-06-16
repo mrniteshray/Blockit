@@ -90,106 +90,113 @@ fun PermissionScreen(navController: NavHostController) {
                 color = Color.White
             )
 
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(12.dp)
-                    .background(Color(0xFF1C1C1E), RoundedCornerShape(12.dp))
-                    .padding(24.dp)
-            ){
-                Column(
+            //Accessibility Service Permission
+            if(!isAccessibilityEnable.value){
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(12.dp)
+                        .background(Color(0xFF1C1C1E), RoundedCornerShape(12.dp))
+                        .padding(24.dp)
                 ){
-                    Text(
-                        text = "Enable Permission",
-                        fontSize = 24.sp,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = Blue
-                    )
-                    Text(
-                        text = "Accessibility Service",
-                        fontSize = 22.sp,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = Blue
-                    )
-                    Text(
-                        text = "This will allow us to block shorts/reels and unwanted apps & websites",
-                        fontSize = 16.sp,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Color.Gray
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Step 1 : Go to Accessibility Settings",
-                        fontSize = 16.sp,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Step 2 : Click on Downloaded Apps",
-                        fontSize = 16.sp,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Step 3 : Then Click on Blockit",
-                        fontSize = 16.sp,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Step 4 : Enable Accessibility Service",
-                        fontSize = 16.sp,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    GradientButton(text = "Enable Accessibility Service",modifier = Modifier.align(Alignment.CenterHorizontally),) {
-                        try {
-                        context.startActivity(
-                            Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            }
+                    Column(
+                    ){
+                        Text(
+                            text = "Enable Permission",
+                            fontSize = 24.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Blue
                         )
-                        } catch (e: ActivityNotFoundException) {
-                            Toast.makeText(context, "Accessibility settings not found", Toast.LENGTH_SHORT).show()
+                        Text(
+                            text = "Accessibility Service",
+                            fontSize = 22.sp,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Blue
+                        )
+                        Text(
+                            text = "This will allow us to block shorts/reels and unwanted apps & websites",
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Step 1 : Go to Accessibility Settings",
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Step 2 : Click on Downloaded Apps",
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Step 3 : Then Click on Blockit",
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Step 4 : Enable Accessibility Service",
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        GradientButton(text = "Enable Accessibility Service",modifier = Modifier.align(Alignment.CenterHorizontally),) {
+                            try {
+                                context.startActivity(
+                                    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                    }
+                                )
+                            } catch (e: ActivityNotFoundException) {
+                                Toast.makeText(context, "Accessibility settings not found", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
             }
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(12.dp)
-                    .background(Color(0xFF1C1C1E), RoundedCornerShape(12.dp))
-                    .padding(24.dp)
-            ){
-                Column(
+
+            //Run in Background Permission
+            if(!isAllowBackgroundRun.value){
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(12.dp)
+                        .background(Color(0xFF1C1C1E), RoundedCornerShape(12.dp))
+                        .padding(24.dp)
                 ){
-                    Text(
-                        text = "Keep App Running in Background",
-                        fontSize = 22.sp,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = Blue
-                    )
-                    Text(
-                        text = "To keep blocking distractions in real time, we need to stay active in the background.",
-                        fontSize = 16.sp,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Color.Gray
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    GradientButton(text = "Allow Permission",modifier = Modifier.align(Alignment.CenterHorizontally),) {
-                        try {
-                            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                                data = Uri.parse("package:${context.packageName}")
+                    Column(
+                    ){
+                        Text(
+                            text = "Keep App Running in Background",
+                            fontSize = 22.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Blue
+                        )
+                        Text(
+                            text = "To keep blocking distractions in real time, we need to stay active in the background.",
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        GradientButton(text = "Allow Permission",modifier = Modifier.align(Alignment.CenterHorizontally),) {
+                            try {
+                                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                                    data = Uri.parse("package:${context.packageName}")
+                                }
+                                context.startActivity(intent)
+                            } catch (e: ActivityNotFoundException) {
+                                Toast.makeText(context, "Accessibility settings not found", Toast.LENGTH_SHORT).show()
                             }
-                            context.startActivity(intent)
-                        } catch (e: ActivityNotFoundException) {
-                            Toast.makeText(context, "Accessibility settings not found", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

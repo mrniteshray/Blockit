@@ -22,7 +22,7 @@ fun SplashScreen(navController: NavController){
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         delay(1000)
-        if (isAccessibilityServiceEnabled(context, BlockAccessibility::class.java)) {
+        if (isAccessibilityServiceEnabled(context, BlockAccessibility::class.java) && isIgnoringBatteryOptimizations(context)) {
             navController.navigate("main"){
                 popUpTo("splash"){inclusive = true}
             }
