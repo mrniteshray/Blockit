@@ -2,15 +2,19 @@ package xcom.niteshray.xapps.xblockit.ui.Screens.Home
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -38,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import xcom.niteshray.xapps.xblockit.R
 import com.airbnb.lottie.compose.*
 import xcom.niteshray.xapps.xblockit.model.ShortBlockItem
-import xcom.niteshray.xapps.xblockit.ui.theme.Blue
 
 @Composable
 fun HomeScreen(enableFocusMode : (Int) -> Unit) {
@@ -82,27 +85,88 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
             AlertDialog(
                 onDismissRequest = { showPrivacyDialog = false },
                 confirmButton = {
-                    TextButton(onClick = {
-                        showPrivacyDialog = false
-                        val uri = "https://mrniteshray.github.io/Blockit/PRIVACY_POLICY"
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                        context.startActivity(intent)
-                    }) {
-                        Text("View Privacy Policy")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(
+                            onClick = {
+                                showPrivacyDialog = false
+                                val uri = "https://buymeacoffee.com/im_nitesh"
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                                context.startActivity(intent)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFFFD700),
+                                contentColor = Color.Black
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Favorite,
+                                    contentDescription = null,
+                                    tint = Color.Black
+                                )
+                                Text(
+                                    text = "Support Me",
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+                        Button(
+                            onClick = {
+                                showPrivacyDialog = false
+                                val uri = "https://mrniteshray.github.io/Blockit/PRIVACY_POLICY"
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                                context.startActivity(intent)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF40C4FF),
+                                contentColor = Color.Black
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp)
+                        ) {
+                            Text(
+                                text = "Privacy Policy",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showPrivacyDialog = false}) {
-                        Text("Close")
-                    }
+
+                },
+                title = {
+                    Text(
+                        text = "Support & Privacy",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
                 },
                 text = {
                     Text(
-                        text = "Click below to view our Privacy Policy.",
-                        color = Color.Black
+                        text = "Support the app or view our Privacy Policy.",
+                        color = Color(0xFFB0BEC5),
+                        textAlign = TextAlign.Center
                     )
                 },
-                containerColor = Color.White
+                containerColor = Color(0xFF212121), // Dark gray background
+                titleContentColor = Color.White,
+                textContentColor = Color(0xFFB0BEC5)
             )
         }
         LottieAnimation(
