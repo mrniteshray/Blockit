@@ -17,6 +17,10 @@
 
 ---
 
+![Banner](screenshots/banner.jpg)
+
+
+
 ## 🚀 Features
 
 - 🔕 **Shorts Blocking**  
@@ -38,14 +42,9 @@
 
 ## 📸 Screenshots
 
-| Shorts Blocking | App Blocking | Focus Mode |
+| Shorts Blocking | App Blocking | Website Blocking |
 |-----------------|--------------|------------|
-| ![](screenshots/shorts.png) | ![](screenshots/apps.png) | ![](screenshots/focus.png) |
-
----
-
-## 📽️ Demo 
-[![Watch Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+| ![](screenshots/short.png) | ![](screenshots/app.png) | ![](screenshots/website.png) |  
 
 ---
 
