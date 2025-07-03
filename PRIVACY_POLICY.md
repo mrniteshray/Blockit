@@ -1,59 +1,80 @@
 # Privacy Policy for Blockit
 
-Welcome to **Blockit**! This Privacy Policy explains how we handle user data and permissions used in our app.
+_Last updated: [04-07-2025]_
+
+Welcome to **Blockit**!  
+Your privacy is important to us. This policy explains how Blockit handles permissions and data to keep your experience safe, transparent, and focused.
 
 ---
 
-## 1️⃣ Information We Collect
+## 🔐 1. What Information We Collect
 
-Blockit **does not collect, store, or share any personal data**.  
-The app functions without requiring **user registration or login**.
-
----
-
-## 2️⃣ Use of Permissions
-
-Blockit requests the following permissions:
-
-- **Apps usage access**: To identify and block specified apps.
-- **Overlay or draw over other apps**: To enable focus mode by placing a blocking view on top of apps.
-- **Notification permission**: To show notifications when blocking starts or ends.
-- **Website blocking**: This involves accessing URLs within a custom browser or WebView. We do not collect or store the URLs you block.
+Blockit **does not collect, store, or share any personal information**.  
+The app runs **entirely offline** and does **not require login or account creation**.
 
 ---
 
-## 3️⃣ Data Security
+## ⚙️ 2. Permissions We Use and Why
 
-Blockit operates entirely **on your phone** — it does not transfer or share data over the internet.  
-Therefore, there’s **no risk of data leaks or unauthorized access**.
+To offer core features that help users stay focused, Blockit requests the following permissions:
 
----
+- **Accessibility Service:**  
+  Required to detect and block specific UI components like Shorts/Reels from apps (e.g., YouTube, Instagram).  
+  📌 *We use this only to help block distractions. No data is read, stored, or shared.*
 
-## 4️⃣ Third-Party Services
+- **Usage Access:**  
+  Required to identify which apps are running so they can be blocked if needed.
 
-Blockit **does not use third-party services** (like ads, trackers, or data aggregators) in its functionality.
+- **Draw Over Other Apps (Overlay):**  
+  Used for the Focus Mode to show a blocking screen during selected time periods.
 
----
+- **Battery Optimization Exemption:**  
+  Required to allow Blockit to run uninterrupted in the background for real-time blocking.
 
-## 5️⃣ User Control & Permissions
+- **Notification Permission:**  
+  Used to display helpful reminders when blocking starts, ends, or focus mode is active.
 
-Users can disable or revoke permissions **at any time** through their phone’s settings.
-
----
-
-## 6️⃣ Changes to This Policy
-
-We may update this policy from time to time.  
-Any new policy will be updated here with its effective date.
-
----
-
-## 7️⃣ Contact Us
-
-If you have any questions or concerns about our Privacy Policy, please feel free to reach us at:
-
-✅ **niteshr070104@gmail.com**
+- **Website Blocking (via in-app browser/WebView):**  
+  Websites are blocked using local filters. We do **not collect, store, or transmit** any URLs or browsing data.
 
 ---
 
-✨ Thank you for trusting Blockit with your focus and productivity! 
+## 🔒 3. Data Handling & Security
+
+- Blockit functions **completely on-device**.  
+- It does **not connect to any server**, nor transmit data over the internet.  
+- No personal data is logged, collected, shared, or monetized.
+
+---
+
+## 🚫 4. No Third-Party Services
+
+Blockit does **not use ads, analytics SDKs, or third-party tracking services**.
+
+---
+
+## 🛡️ 5. User Control
+
+You are always in control.
+
+- You can revoke any permission at any time via system settings.
+- The app continues to function (with limited features) even without some permissions.
+
+---
+
+## 📝 6. Changes to This Policy
+
+We may occasionally update this Privacy Policy to reflect improvements.  
+All changes will be posted within the app or on our official GitHub page.
+
+---
+
+## 📬 7. Contact Us
+
+If you have any questions or suggestions about this Privacy Policy, feel free to contact us:
+
+📧 **niteshr070104@gmail.com**
+
+---
+
+Thank you for choosing Blockit to help reduce distractions and stay focused! 🧠📵
