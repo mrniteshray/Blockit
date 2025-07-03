@@ -27,7 +27,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +54,7 @@ fun PermissionScreen(navController: NavHostController) {
     val context = LocalContext.current
     val isAccessibilityEnable = remember { mutableStateOf(isAccessibilityServiceEnabled(context, BlockAccessibility::class.java)) }
     val isAllowBackgroundRun = remember { mutableStateOf(isIgnoringBatteryOptimizations(context))}
+    var dialog = remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     NotificationHelper(context).checkAndRequestPermission()
@@ -90,7 +93,17 @@ fun PermissionScreen(navController: NavHostController) {
                 color = Color.White
             )
 
-            //Accessibility Service Permission
+            if(dialog.value){
+                AccessibilityPermissionDialog(onAllow = {
+                    context.startActivity(
+                        Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                    )
+                }) {
+                    dialog.value = false
+                }
+            }
             if(!isAccessibilityEnable.value){
                 Box(
                     modifier = Modifier.fillMaxWidth()
@@ -151,11 +164,7 @@ fun PermissionScreen(navController: NavHostController) {
                         Spacer(modifier = Modifier.height(24.dp))
                         GradientButton(text = "Enable Accessibility Service",modifier = Modifier.align(Alignment.CenterHorizontally),) {
                             try {
-                                context.startActivity(
-                                    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                    }
-                                )
+                                dialog.value = true
                             } catch (e: ActivityNotFoundException) {
                                 Toast.makeText(context, "Accessibility settings not found", Toast.LENGTH_SHORT).show()
                             }
@@ -219,3 +228,35 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
     return pm.isIgnoringBatteryOptimizations(context.packageName)
 }
+
+@Composable
+fun AccessibilityPermissionDialog(
+    onAllow: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = "Accessibility Permission Required")
+        },
+        text = {
+            Text(
+                text = "Blockit uses the Accessibility Service to block short video content like YouTube Shorts and Instagram Reels, and also to help you stay away from distracting apps and websites.\n\n" +
+                        "This permission allows us to detect which app is being used, so we can block unwanted content.\n\n" +
+                        "We do not collect or store any of your personal data. Everything stays on your device.\n\n" +
+                        "Do you want to continue and enable Accessibility Service?"
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onAllow) {
+                Text("Allow")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("No, thanks")
+            }
+        }
+    )
+}
+
