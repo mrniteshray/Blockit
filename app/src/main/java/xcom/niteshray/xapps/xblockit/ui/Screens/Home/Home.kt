@@ -2,6 +2,7 @@ package xcom.niteshray.xapps.xblockit.ui.Screens.Home
 
 import android.content.Intent
 import android.net.Uri
+import android.os.CountDownTimer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
@@ -21,35 +24,34 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import xcom.niteshray.xapps.xblockit.R
 import com.airbnb.lottie.compose.*
-import xcom.niteshray.xapps.xblockit.model.ShortBlockItem
+import xcom.niteshray.xapps.xblockit.ui.Screens.isAccessibilityServiceEnabled
+import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
+import xcom.niteshray.xapps.xblockit.util.BlockSharedPref
+import xcom.niteshray.xapps.xblockit.util.PauseTimeService
 
 @Composable
-fun HomeScreen(enableFocusMode : (Int) -> Unit) {
-    var showDialog by remember { mutableStateOf(false) }
-    var selectedMinutes by remember { mutableStateOf(25f) }
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation))
+fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
-
+    val blockSharedPref = BlockSharedPref(context)
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation))
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever
@@ -57,16 +59,8 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
 
     var showPrivacyDialog by remember { mutableStateOf(false) }
 
-
-    val apps = listOf(
-        ShortBlockItem("Instagram Reels", R.drawable.reel,"com.instagram.android", false),
-        ShortBlockItem("Youtube Shorts", R.drawable.shorts,"com.google.android.youtube", false),
-        ShortBlockItem("SnapChat Spotlight", R.drawable.snapchat,"com.snapchat.android",false),
-        ShortBlockItem("Facebook Reels", R.drawable.facebook,"com.facebook.katana",false)
-    )
-
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
@@ -192,44 +186,30 @@ fun HomeScreen(enableFocusMode : (Int) -> Unit) {
             fontWeight = FontWeight.Medium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        GradientButton(text = "Enable Focus Mode",modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            showDialog = true
-        }
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                confirmButton = {
-                    TextButton(onClick = {
-                        showDialog = false
-                        enableFocusMode(selectedMinutes.toInt())
-                    }) {
-                        Text("Start")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("Cancel")
-                    }
-                },
-                title = { Text("Select Focus Duration", modifier = Modifier.align(Alignment.CenterHorizontally)) },
-                text = {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = "${selectedMinutes.toInt()} minutes",
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Slider(
-                            value = selectedMinutes,
-                            onValueChange = { selectedMinutes = it },
-                            valueRange = 5f..60f
-                        )
-                    }
+        var isBlock by remember { mutableStateOf(blockSharedPref.getBlock()) }
+        BlockitControlButtons(
+            isBlock = isBlock,
+            onActiveClick = {
+                if(isAccessibilityServiceEnabled(context,BlockAccessibility::class.java)){
+                    blockSharedPref.setBlock(true)
+                    blockSharedPref.setPauseEndTime(0L)
+                    val intent = Intent(context, PauseTimeService::class.java)
+                    context.stopService(intent)
+                    isBlock = true
+                }else{
+                    navController.navigate("permission")
                 }
-            )
-        }
+            },
+            onPauseClick = { minutes ->
+                val intent = Intent(context , PauseTimeService::class.java)
+                intent.putExtra("pause_time",minutes * 60 * 1000L)
+                context.startService(intent)
+                blockSharedPref.setBlock(false)
+                isBlock = false
+            }
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        ShortsBlockUI(apps)
+        SupportedApps()
     }
 }
 

@@ -22,14 +22,18 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +53,7 @@ import xcom.niteshray.xapps.xblockit.ui.theme.Blue
 import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
 import xcom.niteshray.xapps.xblockit.util.NotificationHelper
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PermissionScreen(navController: NavHostController) {
     val context = LocalContext.current
@@ -78,7 +83,19 @@ fun PermissionScreen(navController: NavHostController) {
             }
         }
     }
-    Scaffold { innerPadding ->
+    Scaffold(
+        floatingActionButton = {
+            Image(
+                painter = painterResource(R.drawable.nextbtn),
+                contentDescription = "next_btn",
+                modifier = Modifier.padding(15.dp).size(55.dp).clickable{
+                    navController.navigate("main"){
+                        popUpTo("permission") { inclusive = true }
+                    }
+                }
+            )
+        }
+    ){ innerPadding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding).background(Color.Black).padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -101,6 +118,7 @@ fun PermissionScreen(navController: NavHostController) {
                         }
                     )
                 }) {
+                    navController.navigate("main")
                     dialog.value = false
                 }
             }

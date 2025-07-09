@@ -62,28 +62,11 @@ class BlockAccessibility : AccessibilityService() {
         }
 
         //Short Blocking Functionality
-        val blockedshorts = getSharedPreferences("BlockedApps", Context.MODE_PRIVATE)
-        val isBlocked = blockedshorts.getBoolean(pkgName, false)
-        if (!isBlocked) return
-        when (pkgName) {
-            "com.google.android.youtube" -> {
-                Log.d("BlockerService", "🎯 YouTube detected")
-                if (isYouTubeShortsScreen(rootNode)) {
-                    Log.d("BlockerService", "🎯 YouTube Shorts detected")
-                    block()
-                }
-            }
-
-            "com.instagram.android" -> {
-                if (isInstagramScreen(rootNode)) {
-                    block()
-                }
-            }
-
-            "com.snapchat.android" -> {
-                if (isSnapchatScreen(rootNode)) {
-                    block()
-                }
+        val blockSharedPref = BlockSharedPref(this)
+        if (blockSharedPref.getBlock() && blockSharedPref.getPauseEndTime() == 0L) {
+            if (isYouTubeShortsScreen(rootNode) || isInstagramScreen(rootNode) || isSnapchatScreen(rootNode)) {
+                Log.d("BlockerService", "Blocking is Working")
+                block()
             }
         }
     }
@@ -149,10 +132,16 @@ class BlockAccessibility : AccessibilityService() {
         return urls
     }
 
+    companion object {
+        private var lastBlockTime = 0L
+    }
     private fun block() {
-        notificationHelper.showBlockedNotification()
         Toast.makeText(this@BlockAccessibility, "Feature Blocked", Toast.LENGTH_SHORT).show()
-        performGlobalAction(GLOBAL_ACTION_BACK)
+        if (System.currentTimeMillis() - lastBlockTime > 2000) {
+            notificationHelper.showBlockedNotification()
+            performGlobalAction(GLOBAL_ACTION_BACK)
+            lastBlockTime = System.currentTimeMillis()
+        }
     }
 
     override fun onInterrupt() {

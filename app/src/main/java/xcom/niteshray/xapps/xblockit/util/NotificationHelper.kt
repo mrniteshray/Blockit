@@ -64,9 +64,21 @@ class NotificationHelper(private val context: Context) {
         }
     }
 
+    fun showBreakNotification() {
+        checkAndRequestPermission()
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("Blockit’s On, Stop Scrolling!🛑")
+            .setContentText("")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setTimeoutAfter(10000)
+
+        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
+    }
+
     fun showBlockedNotification() {
         checkAndRequestPermission()
-
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.logo)
             .setContentTitle(getMessages())

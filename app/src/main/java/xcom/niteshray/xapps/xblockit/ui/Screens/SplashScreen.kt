@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import xcom.niteshray.xapps.xblockit.ui.theme.Black
 import xcom.niteshray.xapps.xblockit.util.BlockAccessibility
+import xcom.niteshray.xapps.xblockit.util.BlockSharedPref
 
 @Composable
 fun SplashScreen(navController: NavController){
@@ -27,6 +28,7 @@ fun SplashScreen(navController: NavController){
                 popUpTo("splash"){inclusive = true}
             }
         }else{
+            BlockSharedPref(context = context).setBlock(false)
             navController.navigate("permission"){
                 popUpTo("splash"){inclusive = true}
             }

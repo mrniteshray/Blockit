@@ -80,9 +80,7 @@ fun MainScreen(navController: NavController){
         ) {
             NavHost(navController = innerNavControlller , startDestination = "home"){
                 composable("home"){
-                    HomeScreen(){
-                        navController.navigate("focus_screen/$it")
-                    }
+                    HomeScreen(navController)
                 }
                 composable("app"){
                     AppScreen()
