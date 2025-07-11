@@ -25,11 +25,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
@@ -42,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -78,6 +85,7 @@ fun PermissionScreen(navController: NavHostController) {
 
     LaunchedEffect(isAccessibilityEnable.value , isAllowBackgroundRun.value) {
         if (isAccessibilityEnable.value && isAllowBackgroundRun.value) {
+            dialog.value = false
             navController.navigate("main") {
                 popUpTo("permission") { inclusive = true }
             }
@@ -102,13 +110,31 @@ fun PermissionScreen(navController: NavHostController) {
         ){
 
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Permissions",
-                fontSize = 28.sp,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text(
+                    text = "Permissions",
+                    fontSize = 22.sp,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                Text(
+                    text = "Skip",
+                    fontSize = 22.sp,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.CenterEnd).clickable{
+                        navController.navigate("main"){
+                            popUpTo("permission") { inclusive = true }
+                        }
+                    }
+                )
+            }
+
 
             if(dialog.value){
                 AccessibilityPermissionDialog(onAllow = {
@@ -118,10 +144,11 @@ fun PermissionScreen(navController: NavHostController) {
                         }
                     )
                 }) {
-                    navController.navigate("main")
                     dialog.value = false
+                    Toast.makeText(context, "You can enable accessibility later from settings", Toast.LENGTH_SHORT).show()
                 }
             }
+
             if(!isAccessibilityEnable.value){
                 Box(
                     modifier = Modifier.fillMaxWidth()
@@ -132,7 +159,7 @@ fun PermissionScreen(navController: NavHostController) {
                     Column(
                     ){
                         Text(
-                            text = "Enable Permission",
+                            text = "Need Permission",
                             fontSize = 24.sp,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
@@ -146,41 +173,21 @@ fun PermissionScreen(navController: NavHostController) {
                             color = Blue
                         )
                         Text(
-                            text = "This will allow us to block shorts/reels and unwanted apps & websites",
+                            text = "This will allow us to block scrolling and unwanted apps & websites",
                             fontSize = 16.sp,
                             style = MaterialTheme.typography.titleSmall,
                             color = Color.Gray
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Step 1 : Go to Accessibility Settings",
-                            fontSize = 16.sp,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
+                            text = "Blockit is 100% secure and DOES NOT\nmonitor/collect any personal data.",
+                            color = Color(0xFF00FF6A),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(vertical = 4.dp)
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Step 2 : Click on Downloaded Apps",
-                            fontSize = 16.sp,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Step 3 : Then Click on Blockit",
-                            fontSize = 16.sp,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Step 4 : Enable Accessibility Service",
-                            fontSize = 16.sp,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        GradientButton(text = "Enable Accessibility Service",modifier = Modifier.align(Alignment.CenterHorizontally),) {
+                        Spacer(modifier = Modifier.height(14.dp))
+                        GradientButton(text = "Agree",modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),) {
                             try {
                                 dialog.value = true
                             } catch (e: ActivityNotFoundException) {
@@ -191,7 +198,6 @@ fun PermissionScreen(navController: NavHostController) {
                 }
             }
 
-            //Run in Background Permission
             if(!isAllowBackgroundRun.value){
                 Box(
                     modifier = Modifier.fillMaxWidth()
@@ -252,29 +258,103 @@ fun AccessibilityPermissionDialog(
     onAllow: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(text = "Accessibility Permission Required")
-        },
-        text = {
-            Text(
-                text = "Blockit uses the Accessibility Service to block short video content like YouTube Shorts and Instagram Reels, and also to help you stay away from distracting apps and websites.\n\n" +
-                        "This permission allows us to detect which app is being used, so we can block unwanted content.\n\n" +
-                        "We do not collect or store any of your personal data. Everything stays on your device.\n\n" +
-                        "Do you want to continue and enable Accessibility Service?"
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onAllow) {
-                Text("Allow")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("No, thanks")
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xCC000000)), // semi-transparent overlay
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF1C1F26)
+            ),
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight()
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Text(
+                    text = "Accessibility Permission Required",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = "To detect and block short videos in real-time, we need accessibility service permission.",
+                    color = Color(0xFFB0B0B0),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                val stepItems = listOf(
+                    "Tap On Agree Button",
+                    "Select Installed Apps",
+                    "Enable Blockit"
+                )
+
+                stepItems.forEachIndexed { index, item ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .background(Color(0xFF2A2E39), RoundedCornerShape(12.dp))
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                    ) {
+                        Text(
+                            text = "${index + 1}.  $item",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Blockit is 100% secure and DOES NOT\nmonitor/collect any personal data.",
+                    color = Color(0xFF00FF6A),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text("Not Now", color = Color.White)
+                    }
+
+                    Button(
+                        onClick = onAllow,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4081)),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Text("Agree", color = Color.White)
+                    }
+                }
             }
         }
-    )
+    }
 }
+
+
 
