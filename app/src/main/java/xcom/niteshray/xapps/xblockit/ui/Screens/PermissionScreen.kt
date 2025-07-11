@@ -96,16 +96,23 @@ fun PermissionScreen(navController: NavHostController) {
             Image(
                 painter = painterResource(R.drawable.nextbtn),
                 contentDescription = "next_btn",
-                modifier = Modifier.padding(15.dp).size(55.dp).clickable{
-                    navController.navigate("main"){
-                        popUpTo("permission") { inclusive = true }
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(55.dp)
+                    .clickable {
+                        navController.navigate("main") {
+                            popUpTo("permission") { inclusive = true }
+                        }
                     }
-                }
             )
         }
     ){ innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).background(Color.Black).padding(4.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(Color.Black)
+                .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
 
@@ -127,31 +134,46 @@ fun PermissionScreen(navController: NavHostController) {
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    modifier = Modifier.align(Alignment.CenterEnd).clickable{
-                        navController.navigate("main"){
-                            popUpTo("permission") { inclusive = true }
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .clickable {
+                            navController.navigate("main") {
+                                popUpTo("permission") { inclusive = true }
+                            }
                         }
-                    }
                 )
             }
 
 
-            if(dialog.value){
-                AccessibilityPermissionDialog(onAllow = {
-                    context.startActivity(
-                        Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        }
-                    )
-                }) {
-                    dialog.value = false
-                    Toast.makeText(context, "You can enable accessibility later from settings", Toast.LENGTH_SHORT).show()
-                }
+            if (dialog.value) {
+                AccessibilityPermissionDialog(
+                    onAllow = {
+                        dialog.value = false
+                        context.startActivity(
+                            Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
+                        )
+                    },
+                    onDeny = {
+                        dialog.value = false
+                        Toast.makeText(context, "You can enable accessibility later from settings", Toast.LENGTH_SHORT).show()
+                    },
+                    onPrivacyPolicyClick = {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://mrniteshray.github.io/Blockit/PRIVACY_POLICY")
+                        )
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        context.startActivity(intent)
+                    }
+                )
             }
 
             if(!isAccessibilityEnable.value){
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(12.dp)
                         .background(Color(0xFF1C1C1E), RoundedCornerShape(12.dp))
                         .padding(24.dp)
@@ -187,7 +209,9 @@ fun PermissionScreen(navController: NavHostController) {
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
-                        GradientButton(text = "Agree",modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),) {
+                        GradientButton(text = "Agree",modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),) {
                             try {
                                 dialog.value = true
                             } catch (e: ActivityNotFoundException) {
@@ -200,7 +224,8 @@ fun PermissionScreen(navController: NavHostController) {
 
             if(!isAllowBackgroundRun.value){
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(12.dp)
                         .background(Color(0xFF1C1C1E), RoundedCornerShape(12.dp))
                         .padding(24.dp)
@@ -256,61 +281,41 @@ fun isIgnoringBatteryOptimizations(context: Context): Boolean {
 @Composable
 fun AccessibilityPermissionDialog(
     onAllow: () -> Unit,
-    onDismiss: () -> Unit
+    onDeny: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xCC000000)), // semi-transparent overlay
-        contentAlignment = Alignment.Center
-    ) {
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF1C1F26)
-            ),
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .wrapContentHeight()
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = { onDeny() }, // Dismissing (back/tap outside) is same as Deny per policy
+        title = {
+            Text(
+                text = "Accessibility Permission Required",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        },
+        text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "Accessibility Permission Required",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = "To detect and block short videos in real-time, we need accessibility service permission.",
+                    text = "Blockit requires Accessibility Service permission to detect and block distracting apps and websites in real-time. We do not collect or share your personal data. This permission is used only for providing the core focus features described in our app. For more details, please review our privacy policy.",
                     color = Color(0xFFB0B0B0),
                     fontSize = 14.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    textAlign = TextAlign.Center
                 )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
+                Spacer(modifier = Modifier.height(16.dp))
                 val stepItems = listOf(
                     "Tap On Agree Button",
                     "Select Installed Apps",
                     "Enable Blockit"
                 )
-
                 stepItems.forEachIndexed { index, item ->
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .background(Color(0xFF2A2E39), RoundedCornerShape(12.dp))
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                            .padding(vertical = 8.dp, horizontal = 12.dp)
                     ) {
                         Text(
                             text = "${index + 1}.  $item",
@@ -320,41 +325,40 @@ fun AccessibilityPermissionDialog(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "Blockit is 100% secure and DOES NOT\nmonitor/collect any personal data.",
+                    text = "Blockit is 100% secure and DOES NOT monitor/collect any personal data.",
                     color = Color(0xFF00FF6A),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextButton(onClick = onDismiss) {
-                        Text("Not Now", color = Color.White)
-                    }
-
-                    Button(
-                        onClick = onAllow,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4081)),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text("Agree", color = Color.White)
-                    }
-                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "View our privacy policy for details.",
+                    color = Blue,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.clickable { onPrivacyPolicyClick() },
+                    textAlign = TextAlign.Center
+                )
             }
-        }
-    }
+        },
+        confirmButton = {
+            Button(
+                onClick = onAllow,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4081)),
+                shape = RoundedCornerShape(50)
+            ) {
+                Text("Agree", color = Color.White)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDeny) {
+                Text("Not Now", color = Color.White)
+            }
+        },
+        containerColor = Color(0xFF1C1F26)
+    )
 }
-
-
-

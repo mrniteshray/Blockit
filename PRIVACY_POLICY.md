@@ -1,6 +1,6 @@
 # Privacy Policy for Blockit
 
-_Last updated: [04-07-2025]_
+_Last updated: [12-07-2025]_
 
 Welcome to **Blockit**!  
 Your privacy is important to us. This policy explains how Blockit handles permissions and data to keep your experience safe, transparent, and focused.
@@ -36,6 +36,41 @@ To offer core features that help users stay focused, Blockit requests the follow
 
 - **Website Blocking (via in-app browser/WebView):**  
   Websites are blocked using local filters. We do **not collect, store, or transmit** any URLs or browsing data.
+
+---
+
+## 👁️‍🗨️ Accessibility Service Disclosure (Google Play Compliance)
+
+Blockit requests the Accessibility Service permission **only** for the following core features:
+
+- Detecting which apps and screens are currently active to block distracting content (such as
+  Shorts, Reels, or other specified apps).
+- Automatically displaying a block overlay to help you stay focused.
+
+**What accessibility data Blockit receives:**
+
+- Limited information about which app or UI screen is in use (the app package name, some
+  non-personal accessibility events such as window/state changes).
+
+**What Blockit does NOT access or collect:**
+
+- The app does **not** read, log, store, or transmit:
+    - Text contents displayed on your device
+    - Personal information, messages, passwords, payment details
+    - Input fields, audio, or touch input
+
+All accessibility events are processed entirely **on your device** and are **never collected,
+uploaded, sold, or shared with anyone**.
+
+Granting Accessibility permission is **completely optional**, but some focus & blocking features
+will not work without it. You can continue to use other features without granting this permission.
+
+**How to revoke:**
+
+- At any time, you can disable Accessibility permission for Blockit in your device's Android
+  Settings under: `Settings` > `Accessibility` > `Installed Services` > `Blockit` > Disable.
+
+Blockit strictly follows the Google Play User Data Policy for Accessibility and user privacy.
 
 ---
 
